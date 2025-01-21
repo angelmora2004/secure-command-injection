@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ping a una IP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            text-align: center;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+        }
+        button {
+            padding: 10px 20px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+            white-space: pre-wrap;
+            text-align: left;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ping a una IP</h1>
+    <form id="pingForm">
+        <input type="text" id="ipInput" placeholder="Ingrese una dirección IP" required>
+        <button type="submit">Ping</button>
+    </form>
+    <pre id="output"></pre>
+
+    <script>
+        document.getElementById('pingForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const ip = document.getElementById('ipInput').value;
+    const outputElement = document.getElementById('output');
+
+    try {
+        const response = await fetch('http://localhost:8080/api/ping', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ip }),
+        });
+
+        const text = await response.text();
+        outputElement.textContent = response.ok ? text : `Error: ${text}`;
+    } catch (error) {
+        outputElement.textContent = `Error: ${error.message}`;
+    }
+});
+    </script>
+</body>
+</html>
